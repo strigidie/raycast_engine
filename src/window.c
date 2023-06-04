@@ -1,8 +1,10 @@
 #include "engine.h"
 
+winfo_t* winfo;
+
 SDL_Window* window = NULL;
 
-void W_Init(uint32_t width, uint32_t height)
+void W_Init(void)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -10,25 +12,44 @@ void W_Init(uint32_t width, uint32_t height)
         exit(EXIT_FAILURE);
     }
 
-    // For Fullscreen
-    // SDL_SetWindowGrab(window, true);
-    // SDL_SetRelativeMouseMode(true);
+    uint32_t sdl_flags = 0;
+    if (winfo->fullscreen)
+        sdl_flags |= SDL_WINDOW_FULLSCREEN;
 
-    window = SDL_CreateWindow("Raycast",
+    switch (winfo->API)
+    {
+        default:
+        case API_OPENGL:
+            sdl_flags |= SDL_WINDOW_OPENGL;
+            break;
+        
+        case API_VULKAN:
+            sdl_flags |= SDL_WINDOW_VULKAN;
+            break;
+    }
+
+    window = SDL_CreateWindow(ENGINE_TITLE,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        width, height,
-        SDL_WINDOW_OPENGL
+        winfo->width, winfo->height,
+        sdl_flags
     );
 
     if (!window)
     {
-        printf("[Error]: SDL_CreateWindow(), code: %s\n", SDL_GetError());
+        printf("[Error]: SDL_CreateWindow(), code: %s;\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
+    if (winfo->fullscreen)
+    {
+        SDL_SetWindowGrab(window, true);
+        SDL_SetRelativeMouseMode(true);
+    }
+
+
     if (TTF_Init() == -1)
     {
-        printf("[Error]: TTF_Init()\n");
+        printf("[Error]: TTF_Init();\n");
         exit(EXIT_FAILURE);
     }
 }
@@ -73,8 +94,8 @@ void W_MainLoop()
         }
     
         // R_DrawMap();
-        R_DrawFrame();
-        R_DrawGUI(deltaTime);
+        // R_DrawFrame();
+        // R_DrawGUI(deltaTime);
         SDL_GL_SwapWindow(window);
     }
 }

@@ -14,8 +14,9 @@ typedef struct glrender_s
 } glrender_t;
 
 extern glrender_t* glrender;
+extern renderAPI_t renderAPI;
 
-void R_Init(uint32_t width, uint32_t height);
+void R_Init(void);
 void R_Shutdown(void);
 
 void R_DrawFrame(void);
