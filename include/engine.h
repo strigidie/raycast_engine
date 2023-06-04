@@ -44,7 +44,11 @@
 // Project headers
 // -----------------------------------------------------------------------------
 #include "window.h"
+
 #include "render.h"
+#include "render_opengl.h"
+#include "render_vulkan.h"
+
 #include "map.h"
 #include "player.h"
 

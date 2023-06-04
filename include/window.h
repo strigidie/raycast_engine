@@ -6,21 +6,11 @@
 #define DEFUALT_WINDOW_WIDTH 800
 #define DEFUALT_WINDOW_HEIGHT 600
 
-#define MIN_WINDOW_WIDTH 800
-#define MIN_WINDOW_HEIGHT 600
-
-typedef enum renderAPI_e
-{
-    API_OPENGL = 0,
-    API_VULKAN
-} renderAPI_t;
-
 typedef struct winfo_s
 {
     uint32_t width;
     uint32_t height;
     bool fullscreen;
-    renderAPI_t API;
 } winfo_t;
 
 extern winfo_t* winfo;

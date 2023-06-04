@@ -1,7 +1,6 @@
 #include "engine.h"
 
 winfo_t* winfo;
-
 SDL_Window* window = NULL;
 
 void W_Init(void)
@@ -16,17 +15,11 @@ void W_Init(void)
     if (winfo->fullscreen)
         sdl_flags |= SDL_WINDOW_FULLSCREEN;
 
-    switch (winfo->API)
-    {
-        default:
-        case API_OPENGL:
-            sdl_flags |= SDL_WINDOW_OPENGL;
-            break;
-        
-        case API_VULKAN:
-            sdl_flags |= SDL_WINDOW_VULKAN;
-            break;
-    }
+    #ifdef OPENGL
+        sdl_flags |= SDL_WINDOW_OPENGL;
+    #elif VULKAN
+        sdl_flags |= SDL_WINDOW_VULKAN;
+    #endif
 
     window = SDL_CreateWindow(ENGINE_TITLE,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -45,7 +38,6 @@ void W_Init(void)
         SDL_SetWindowGrab(window, true);
         SDL_SetRelativeMouseMode(true);
     }
-
 
     if (TTF_Init() == -1)
     {
@@ -94,7 +86,7 @@ void W_MainLoop()
         }
     
         // R_DrawMap();
-        // R_DrawFrame();
+        R_DrawFrame();
         // R_DrawGUI(deltaTime);
         SDL_GL_SwapWindow(window);
     }
