@@ -2,12 +2,12 @@
 
 glrender_t* glrender;
 
-void R_Init(uint32_t width, uint32_t height)
+void R_Init(void)
 {
     glrender = (glrender_t*)malloc(sizeof(glrender_t));
     memset(glrender, 0, sizeof(glrender_t));
-    glrender->width = width;
-    glrender->height = height;
+    // glrender->width = width;
+    // glrender->height = height;
     glrender->context = SDL_GL_CreateContext(window);
 
     glrender->frame_buffer = (uint32_t*)malloc(sizeof(uint32_t) * (glrender->width * glrender->height));

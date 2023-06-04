@@ -61,15 +61,28 @@ target_include_directories(
 )
 
 message(STATUS "[message]: Linking libraries...")
-target_link_libraries(
-    ${PROJECT_NAME}
-    PRIVATE SDL2::SDL2
-    PRIVATE SDL2_image::SDL2_image
-    PRIVATE SDL2_mixer::SDL2_mixer
-    PRIVATE SDL2_ttf::SDL2_ttf
-    OpenGL::GL
-    Vulkan::Vulkan
-)
+
+if (WIN32)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE SDL2::SDL2
+        PRIVATE SDL2_image::SDL2_image
+        PRIVATE SDL2_mixer::SDL2_mixer
+        PRIVATE SDL2_ttf::SDL2_ttf
+        OpenGL::GL
+        Vulkan::Vulkan
+    )
+elseif(APPLE)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE ${SDL2_LIBRARY}
+        PRIVATE ${SDL2_IMAGE_LIBRARIES}
+        PRIVATE ${SDL2_MIXER_LIBRARIES}
+        PRIVATE ${SDL2_TTF_LIBRARIES}
+        OpenGL::GL
+        Vulkan::Vulkan
+    )
+endif()
 
 set(EXECUTABLE_DESTINATION "${CMAKE_SOURCE_DIR}/engine")
 
@@ -77,25 +90,27 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory "${EXECUTABLE_DESTINATION}/"
 )
 
-get_target_property(SDL2_DLL_LOCATION SDL2::SDL2 IMPORTED_LOCATION)
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_DLL_LOCATION} "${EXECUTABLE_DESTINATION}/"
-)
+if (WIN32)
+    get_target_property(SDL2_DLL_LOCATION SDL2::SDL2 IMPORTED_LOCATION)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+        COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_DLL_LOCATION} "${EXECUTABLE_DESTINATION}/"
+    )
 
-get_target_property(SDL2_IMAGE_DLL_LOCATION SDL2_image::SDL2_image IMPORTED_LOCATION)
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_IMAGE_DLL_LOCATION} "${EXECUTABLE_DESTINATION}/"
-)
+    get_target_property(SDL2_IMAGE_DLL_LOCATION SDL2_image::SDL2_image IMPORTED_LOCATION)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+        COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_IMAGE_DLL_LOCATION} "${EXECUTABLE_DESTINATION}/"
+    )
 
-get_target_property(SDL2_MIXER_DLL_LOCATION SDL2_mixer::SDL2_mixer IMPORTED_LOCATION)
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_MIXER_DLL_LOCATION} "${EXECUTABLE_DESTINATION}/"
-)
+    get_target_property(SDL2_MIXER_DLL_LOCATION SDL2_mixer::SDL2_mixer IMPORTED_LOCATION)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+        COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_MIXER_DLL_LOCATION} "${EXECUTABLE_DESTINATION}/"
+    )
 
-get_target_property(SDL2_TTF_DLL_LOCATION SDL2_ttf::SDL2_ttf IMPORTED_LOCATION)
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_TTF_DLL_LOCATION} "${EXECUTABLE_DESTINATION}/"
-)
+    get_target_property(SDL2_TTF_DLL_LOCATION SDL2_ttf::SDL2_ttf IMPORTED_LOCATION)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+        COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_TTF_DLL_LOCATION} "${EXECUTABLE_DESTINATION}/"
+    )
+endif()
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/font/engine_font.ttf" "${EXECUTABLE_DESTINATION}/"
