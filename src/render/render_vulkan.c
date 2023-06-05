@@ -2,5 +2,14 @@
 
 void R_Init(void)
 {
-    printf("[info] Render 'Vulkan' initializing...");
+    
+}
+
+void R_Destroy(void)
+{
+}   
+
+void R_DrawFrame(void)
+{
+
 }

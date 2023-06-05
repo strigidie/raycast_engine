@@ -17,12 +17,11 @@ int main(int argc, char* argv[])
 
     W_Init();
     R_Init();
-    // F_Init();
-    // M_Init();
+    R_Init_Extra();
 
     W_MainLoop();
 
-    // R_Shutdown();
+    R_Destroy();
     W_Destroy();
     free(winfo);
 

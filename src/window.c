@@ -44,6 +44,8 @@ void W_Init(void)
         printf("[Error]: TTF_Init();\n");
         exit(EXIT_FAILURE);
     }
+
+    IMG_Init(IMG_INIT_PNG);
 }
 
 void W_MainLoop()
@@ -85,9 +87,9 @@ void W_MainLoop()
             }
         }
     
-        // R_DrawMap();
+        R_CameraUpdate(deltaTime);
+        R_Framebuffer(deltaTime);
         R_DrawFrame();
-        // R_DrawGUI(deltaTime);
         SDL_GL_SwapWindow(window);
     }
 }
