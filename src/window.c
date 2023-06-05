@@ -90,7 +90,6 @@ void W_MainLoop()
         R_CameraUpdate(deltaTime);
         R_Framebuffer(deltaTime);
         R_DrawFrame();
-        SDL_GL_SwapWindow(window);
     }
 }
 

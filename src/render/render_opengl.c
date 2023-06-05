@@ -1,7 +1,6 @@
 #include "engine.h"
 
 SDL_GLContext glcontext;
-uint32_t* frameBuffer;
 
 void R_Init(void)
 {
@@ -51,4 +50,6 @@ void R_DrawFrame(void)
 
     glDisable(GL_TEXTURE_2D);
     glDeleteTextures(1, &bufferTextureId);
+
+    SDL_GL_SwapWindow(window);
 }

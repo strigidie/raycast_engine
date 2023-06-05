@@ -10,6 +10,8 @@ Mix_Chunk* sound;
 
 uint32_t** map;
 
+uint32_t* frameBuffer;
+
 double* ZBuffer;
 
 typedef struct Sprite_s
@@ -27,10 +29,10 @@ Sprite sprite[numSprites] =
   {18.5,4.5, 1},
   {10.0,4.5, 1},
   {10.0,12.5,1},
-  {3.5, 6.5, 1},
-  {3.5, 20.5,1},
-  {3.5, 14.5,1},
-  {14.5,20.5,1},
+  {3.5, 6.5, 2},
+  {3.5, 20.5,2},
+  {3.5, 14.5,2},
+  {14.5,20.5,2},
   {18.5, 10.5, 2},
   {18.5, 11.5, 2},
   {18.5, 12.5, 2},
@@ -135,8 +137,8 @@ void R_Init_Extra(void)
         exit(EXIT_FAILURE);
     }
 
-    sound = Mix_LoadWAV("assets/sound/sound.wav");
-    Mix_PlayChannel(1, sound, -1);
+    // sound = Mix_LoadWAV("assets/sound/sound.wav");
+    // Mix_PlayChannel(1, sound, -1);
 
     /* Load a map */
     FILE *mapFile = fopen("assets/map/map.txt", "r");
@@ -318,7 +320,7 @@ void R_Framebuffer(double deltaTime)
         int stepY;
 
         int hit = 0;
-        int side;
+        int side = 0;
 
         if(rayDirX < 0)
         {
@@ -361,7 +363,7 @@ void R_Framebuffer(double deltaTime)
                 hit = 1;
         }
 
-        if(side == 0)
+        if (side == 0)
             perpWallDist = (sideDistX - deltaDistX);
         else
             perpWallDist = (sideDistY - deltaDistY);
@@ -464,7 +466,7 @@ void R_Framebuffer(double deltaTime)
     }
 
 
-    static char str[50] = "0 FPS";
+    static char str[50] = "FPS: 0 | X: 0 | Y: 0";
     if (fpsTimer < 1)
     {
         fpsTimer += deltaTime;
@@ -472,7 +474,7 @@ void R_Framebuffer(double deltaTime)
     else
     {
         fpsTimer = 0.0f;
-        snprintf(str, 50, "%d FPS", (int)(1.0f / deltaTime));
+        snprintf(str, 50, "FPS: %d | X: %d | Y: %d", (int)(1.0f / deltaTime), (int)posX, (int)posY);
     }
 
     SDL_Color color = {255, 255, 255, 255};
