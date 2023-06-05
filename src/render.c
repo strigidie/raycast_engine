@@ -53,7 +53,7 @@ void sortSprites(int* order, double* dist, int amount);
 
 void R_Init_Extra(void)
 {
-    FILE *texCountFile = fopen("assets/texture/info.txt", "r");
+    FILE *texCountFile = fopen("./assets/texture/info.txt", "r");
     
     if (!texCountFile)
     {

@@ -33,8 +33,11 @@ void R_DrawFrame(void)
     glBindTexture(GL_TEXTURE_2D, bufferTextureId);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, winfo->width, winfo->height, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, frameBuffer);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, winfo->width, winfo->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, frameBuffer);
+    #ifdef _WIN32
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, winfo->width, winfo->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, frameBuffer);
+    #elif __APPLE__
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, winfo->width, winfo->height, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, frameBuffer);
+    #endif
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, bufferTextureId);
